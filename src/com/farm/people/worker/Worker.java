@@ -17,6 +17,7 @@ public abstract class Worker implements Observer {
         this.hungerMeter = 100;
         this.sanityMeter = 100;
         this.state = new Working();
+        Manager.GetManager().registerObserver(this);
     }
 
     public abstract String toString();
