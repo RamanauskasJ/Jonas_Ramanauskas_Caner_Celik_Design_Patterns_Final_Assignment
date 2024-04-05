@@ -1,8 +1,10 @@
 package com.farm.people.worker;
 
 import com.farm.farm.Farm;
+import com.farm.people.Manager;
 import com.farm.people.Observer;
 import com.farm.people.state.State;
+import com.farm.people.state.Working;
 
 public abstract class Worker implements Observer {
     private int timesWorked;
@@ -14,6 +16,7 @@ public abstract class Worker implements Observer {
         this.timesWorked = 0;
         this.hungerMeter = 100;
         this.sanityMeter = 100;
+        this.state = new Working();
     }
 
     public abstract String toString();
@@ -64,6 +67,14 @@ public abstract class Worker implements Observer {
 
     public void setState(State state) {
         this.state = state;
+    }
+
+    public final void doTask() {
+        this.state.executeState(this);
+    }
+
+    public final void Update() {
+        this.state.nextState(this);
     }
 
     public boolean isWorkerOverWorked() {
