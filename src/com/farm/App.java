@@ -1,5 +1,9 @@
 package com.farm;
 
+import com.farm.crop.CornCrop;
+import com.farm.crop.Crop;
+import com.farm.crop.OatCrop;
+import com.farm.crop.WheatCrop;
 import com.farm.farm.*;
 import com.farm.people.Manager;
 import com.farm.people.decorator.LoadTractor;
@@ -30,6 +34,19 @@ public class App {
                             3. Observe crop storage.
                         """
         );
+
+        try {
+            String choice = reader.readLine();
+
+            switch (choice) {
+                case "1" -> createFarms();
+                case "2" -> manageFarms();
+                case "3" -> observeCropStorage();
+                default -> home();
+            }
+        } catch (IOException e) {
+            home();
+        }
     }
 
     public void createFarm(Farm farm) {
@@ -56,7 +73,7 @@ public class App {
                         2. 'Motivate' workers
                         3. Move workers to next state
                         4. Manage specific worker
-                            
+                        
                         Press `q` to cancel
                         """
         );
@@ -75,8 +92,6 @@ public class App {
         } catch (IOException e) {
             manageFarm(farm);
         }
-
-        manageFarm(farm);
     }
 
     public void manageWorker(Worker worker, Farm farm) {
@@ -91,7 +106,7 @@ public class App {
                         What action would you like to perform?
                         1. Add extra task
                         2. 'Fire' worker
-                            
+                        
                         Press `q` to cancel
                         """
         );
@@ -117,7 +132,7 @@ public class App {
                             1. Corn Field
                             2. Oat Field
                             3. Wheat Field
-                            
+                        
                             Press `q` to cancel
                         """
         );
@@ -138,7 +153,7 @@ public class App {
     }
 
     public void manageFarms() {
-        if (farms.size() < 1) {
+        if (farms.isEmpty()) {
             home();
         }
 
@@ -157,11 +172,11 @@ public class App {
     }
 
     public void manageWorkers(Farm farm) {
-        if (farm.getWorkers().size() < 1) {
+        if (farm.getWorkers().isEmpty()) {
             try {
                 manageFarm(farm);
             } catch (Exception e) {
-                e.printStackTrace();
+                e.printStackTrace(System.out);
             }
         }
         System.out.println("Which worker you like to manage?");
@@ -177,7 +192,7 @@ public class App {
             try {
                 manageFarm(farm);
             } catch (Exception ex) {
-                ex.printStackTrace();
+                ex.printStackTrace(System.out);
             }
         }
     }
@@ -185,7 +200,7 @@ public class App {
 
     /**
      * Create a method for purchasing workers for a specific farm
-     * @param farm
+     * @param farm - Farm for workers/crops/tractors
      */
     public void purchaseWorker(Farm farm){
         System.out.println(
@@ -193,7 +208,7 @@ public class App {
                         Would you like to 'hire' a farmer or a tractor driver?
                         1. Farmer
                         2. Tractor Driver
-                            
+                        
                         Press `q` to cancel
                         """
         );
@@ -226,27 +241,27 @@ public class App {
 
     /**
      * Create a method for Motivate workers for a specific farm
-     * @param farm
+     * @param farm - Farm for workers/crops/tractors
      */
     public void motivateWorkers(Farm farm){
         Manager.GetManager().motivateWorkers();
         try {
             manageFarm(farm);
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
     }
 
     /**
      * Create a method for moving workers to next state
-     * @param farm
+     * @param farm - Farm for workers/crops/tractors
      */
     public void moveShifts(Farm farm){
         Manager.GetManager().notifyObservers();
         try {
             manageFarm(farm);
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
     }
 
@@ -268,4 +283,23 @@ public class App {
     public void fireWorker(Worker worker, Farm farm) {
         farm.fireWorker(worker);
     }
+
+    public void observeCropStorage() {
+        System.out.println("Corn Farmed: " + CropStorage.getCrops().stream().filter(crop -> crop instanceof CornCrop).count());
+        System.out.println("Oat Farmed: " + CropStorage.getCrops().stream().filter(crop -> crop instanceof OatCrop).count());
+        System.out.println("Wheat Farmed: " + CropStorage.getCrops().stream().filter(crop -> crop instanceof WheatCrop).count());
+        System.out.println("Value Of Crop: " + Math.round(CropStorage.getCrops().stream().mapToDouble(Crop::getPrice).sum()));
+        System.out.println("Total weight: " + Math.round(CropStorage.getCrops().stream().mapToDouble(Crop::getWeightInKg).sum()));
+        System.out.println("Press any button to return to home.");
+
+        try {
+            reader.readLine();
+
+            home();
+        } catch (IOException e) {
+            createFarms();
+        }
+    }
+
+
 }
