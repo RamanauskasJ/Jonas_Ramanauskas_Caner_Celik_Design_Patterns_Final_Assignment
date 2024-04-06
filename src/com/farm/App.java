@@ -1,7 +1,11 @@
 package com.farm;
 
 import com.farm.farm.*;
-
+import com.farm.people.decorator.LoadTractor;
+import com.farm.people.decorator.UnloadTractor;
+import com.farm.people.worker.Farmer;
+import com.farm.people.worker.TractorDriver;
+import com.farm.people.worker.Worker;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -74,6 +78,36 @@ public class App {
         manageFarm(farm);
     }
 
+    public void manageWorker(Worker worker, Farm farm) {
+        System.out.println("Worker Status: " + worker.getState().toString());
+        System.out.println("Worker type: " + worker.getClass());
+        System.out.println("Worker Hunger: " + worker.getHungerMeter());
+        System.out.println("Worker Sanity: " + worker.getSanityMeter());
+        System.out.println("Worker Times Worked: " + worker.getTimesWorked());
+
+        System.out.println(
+                """
+                        What action would you like to perform?
+                        1. Add extra task
+                        2. 'Fire' worker
+                            
+                        Press `q` to cancel
+                        """
+        );
+
+        try {
+            String choice = reader.readLine();
+
+            switch (choice) {
+                case "1" -> addWorkerTask(worker, farm);
+                case "2" -> fireWorker(worker, farm);
+                case "q" -> home();
+                default -> manageWorker(worker, farm);
+            }
+        } catch (IOException e) {
+            manageWorker(worker, farm);
+        }
+    }
 
     public void createFarms() {
         System.out.println(
@@ -101,6 +135,7 @@ public class App {
             createFarms();
         }
     }
+
     public void manageFarms() {
         if (farms.size() < 1) {
             home();
@@ -117,6 +152,32 @@ public class App {
             manageFarm(farms.get(choice - 1));
         } catch (Exception e) {
             manageFarms();
+        }
+    }
+
+    public void manageWorkers(Farm farm) {
+        if (farm.getWorkers().size() < 1) {
+            try {
+                manageFarm(farm);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("Which worker you like to manage?");
+        for (int i = 0; i < farm.getWorkers().size(); i++) {
+            System.out.println((i + 1) + ". " + farm.getWorkers().get(i).toString() + " number " + (i + 1));
+        }
+
+        try {
+            int choice = Integer.parseInt(reader.readLine());
+
+            manageWorker(farm.getWorkers().get(choice - 1), farm);
+        } catch (Exception e) {
+            try {
+                manageFarm(farm);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -144,11 +205,22 @@ public class App {
 
     }
 
-    /**
-     * Create a method for Managing workers.
-     * @param farm
-     */
-    public void manageWorkers(Farm farm){
+    public void addWorkerTask(Worker worker, Farm farm) {
+        final var worker1 = worker;
+        farm.getWorkers().forEach(farmWorker -> {
+            if (farmWorker.equals(worker1)) {
+                farm.getWorkers().remove(farmWorker);
 
+                if (farmWorker instanceof Farmer || farmWorker instanceof LoadTractor) {
+                    farm.addWorker(new LoadTractor(worker1));
+                } else if (farmWorker instanceof TractorDriver) {
+                    farm.addWorker(new UnloadTractor(worker1));
+                }
+            }
+        });
+    }
+
+    public void fireWorker(Worker worker, Farm farm) {
+        farm.fireWorker(worker);
     }
 }
