@@ -1,6 +1,7 @@
 package com.farm;
 
 import com.farm.farm.*;
+import com.farm.people.Manager;
 import com.farm.people.decorator.LoadTractor;
 import com.farm.people.decorator.UnloadTractor;
 import com.farm.people.worker.Farmer;
@@ -187,6 +188,40 @@ public class App {
      * @param farm
      */
     public void purchaseWorker(Farm farm){
+        System.out.println(
+                """
+                        Would you like to 'hire' a farmer or a tractor driver?
+                        1. Farmer
+                        2. Tractor Driver
+                            
+                        Press `q` to cancel
+                        """
+        );
+
+        try {
+            String choice = reader.readLine();
+
+            switch (choice) {
+                case "1" -> purchaseFarmer(farm);
+                case "2" -> purchaseTractorDriver(farm);
+                case "q" -> home();
+                default -> purchaseWorker(farm);
+            }
+
+            manageFarm(farm);
+        } catch (Exception e) {
+            purchaseWorker(farm);
+        }
+    }
+
+    public void purchaseFarmer(Farm farm) {
+        System.out.println("Farmer successfully added");
+        farm.addWorker(new Farmer());
+    }
+
+    public void purchaseTractorDriver(Farm farm) {
+        System.out.println("Tractor Driver successfully added");
+        farm.addWorker(new TractorDriver());
     }
 
     /**
@@ -194,7 +229,12 @@ public class App {
      * @param farm
      */
     public void motivateWorkers(Farm farm){
-
+        Manager.GetManager().motivateWorkers();
+        try {
+            manageFarm(farm);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -202,7 +242,12 @@ public class App {
      * @param farm
      */
     public void moveShifts(Farm farm){
-
+        Manager.GetManager().notifyObservers();
+        try {
+            manageFarm(farm);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void addWorkerTask(Worker worker, Farm farm) {
