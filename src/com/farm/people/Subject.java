@@ -1,9 +1,13 @@
 package com.farm.people;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public interface Subject {
-    void registerObserver(Observer observer);
+    List<Observer> observers = new ArrayList<>();
 
-    void removeObserver(Observer observer);
+    default void registerObserver(Observer observer) {
+        observers.add(observer);
+    }
 
-    void notifyObservers();
 }

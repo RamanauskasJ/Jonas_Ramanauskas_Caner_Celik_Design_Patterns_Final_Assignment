@@ -1,18 +1,18 @@
+// Eating.java
 package com.farm.people.state;
 
 import com.farm.people.worker.Worker;
 
-public class Eating extends State {
-
-    @Override
-    public void nextState(Worker worker) {
-        worker.setState(new Working());
-    }
-
+public class Eating implements State {
     @Override
     public void executeState(Worker worker) {
         worker.increaseHungerMeter(20);
-        worker.increaseSanityMeter(10);
+        System.out.println(worker + " is eating.");
+    }
+
+    @Override
+    public void nextState(Worker worker) {
+        worker.setState(new Sleeping());
     }
 
     @Override

@@ -2,19 +2,24 @@ package com.farm.people.worker;
 
 import com.farm.farm.Farm;
 
-public class TractorDriver extends Worker{
-    @Override
-    public void work(Farm farm) {
-        if (!farm.getTractor().isAtCropStorage() && farm.getTractor().isFull()) {
-            farm.getTractor().setAtCropStorage(true);
-        } else if (farm.getTractor().isAtCropStorage() && !farm.getTractor().isFull()) {
-            farm.getTractor().setAtCropStorage(false);
-        }
+public class TractorDriver extends Worker {
+
+    public TractorDriver() {
+        super();
     }
 
     @Override
     public String toString() {
-        return "tractor driver";
+        return "TractorDriver";
     }
 
+    @Override
+    public void work(Farm farm) {
+        // Implementation for work
+    }
+
+    @Override
+    public void Update() {
+        this.doTask();
+    }
 }

@@ -3,6 +3,7 @@ package com.farm.farm;
 import com.farm.crop.Crop;
 
 import java.util.HashSet;
+import java.util.Queue;
 
 public class CropStorage {
     static HashSet<Crop> crops = new HashSet<>();
@@ -11,7 +12,7 @@ public class CropStorage {
         return crops;
     }
 
-    public static void addCrop(Crop crop) {
-        crops.add(crop);
+    public static void addCrops(Queue<Crop> newCrops) {
+        crops.addAll(newCrops);
     }
 }

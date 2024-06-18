@@ -1,18 +1,17 @@
+// Idle.java
 package com.farm.people.state;
 
 import com.farm.people.worker.Worker;
 
-public class Idle extends State {
-
+public class Idle implements State {
     @Override
-    public void nextState(Worker worker) {
-        worker.setState(new Sleeping());
+    public void executeState(Worker worker) {
+        System.out.println(worker + " is idle.");
     }
 
     @Override
-    public void executeState(Worker worker) {
-        worker.decreaseSanityMeter(1);
-        worker.decreaseHungerMeter(1);
+    public void nextState(Worker worker) {
+        worker.setState(new Working());
     }
 
     @Override

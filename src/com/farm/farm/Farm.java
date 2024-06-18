@@ -50,14 +50,14 @@ public abstract class Farm {
         return tractor;
     }
 
-    public abstract Crop GenerateCrop();
+    public Queue<Crop> getCropsInTractor() {
+        return tractor.getCrops(); // Assuming Tractor has a getCrops() method
+    }
+
+    public abstract Crop generateCrop();
 
     public void removeOverWorkedWorkers() {
-
         workers.removeIf(Worker::isWorkerOverWorked);
     }
 
-    public void fireWorker(Worker worker) {
-        workers.remove(worker);
-    }
 }
