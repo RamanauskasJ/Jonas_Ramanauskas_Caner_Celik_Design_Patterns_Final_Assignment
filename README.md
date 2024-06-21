@@ -2,7 +2,7 @@
 
 [Start Document](DesignPatterns2024_StartDocument.pdf)
 <br>
-[UML Diagram](UML_Final.png)
+[UML Diagram](UML_Updated_FINAL.png)
 
 ## Application Description
 

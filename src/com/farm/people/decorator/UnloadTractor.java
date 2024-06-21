@@ -12,7 +12,6 @@ public class UnloadTractor extends WorkTypeDecorator {
     @Override
     public void work(Farm farm) {
         super.work(farm);
-        // Additional implementation for UnloadTractor work
     }
 
     @Override

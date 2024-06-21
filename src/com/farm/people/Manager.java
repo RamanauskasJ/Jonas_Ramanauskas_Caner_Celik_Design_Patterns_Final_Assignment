@@ -32,19 +32,6 @@ public class Manager implements Subject {
         this.observers.add(observer);
     }
 
-    @Override
-    public void removeObserver(Observer observer) {
-        this.observers.remove(observer);
-    }
-
-    @Override
-    public void notifyObservers() {
-        for (Observer observer :
-                observers) {
-            observer.Update();
-        }
-    }
-
     public void motivateWorkers() {
         for (Farm farm : this.farms) {
             farm.removeOverWorkedWorkers();
